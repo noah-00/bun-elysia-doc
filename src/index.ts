@@ -43,6 +43,17 @@ app.group("/user", (app) =>
   app
     .get("/", () => "Hello User")
     .get("/info", ({ store }) => store.userInfo)
+    .get(
+      "/info/:id",
+      ({ params }) => {
+        return `User ID: ${params.id}`;
+      },
+      {
+        params: t.Object({
+          id: t.Numeric(),
+        }),
+      }
+    )
     .post("/", ({ body, set }) => {
       set.status = 201;
       return body;
