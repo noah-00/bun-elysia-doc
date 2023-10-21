@@ -1,6 +1,13 @@
 import { Elysia } from "elysia";
 
+// Define plugin
+const plugin = new Elysia()
+  .state("plugin-version", "2.0.0")
+  .get("/plugin", () => "Hello Plugin")
+  .get("/greet", () => "Hell");
+
 const app = new Elysia()
+  .use(plugin)
   .state("version", "1.0.0")
   .state("info", {
     id: 1,
@@ -21,6 +28,7 @@ const app = new Elysia()
     console.log(store.info);
     console.log(store.version);
     console.log(getDate());
+    console.log(store["plugin-version"]);
     return new Response(
       JSON.stringify({
         tracks: ["track1", "track2"],
