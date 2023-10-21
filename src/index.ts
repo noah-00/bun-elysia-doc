@@ -1,10 +1,12 @@
 import { Elysia } from "elysia";
 import { plugin } from "./plugin";
 
+const PORT = 3000;
+
 const app = new Elysia()
   .use(plugin)
   .state("version", "1.0.0")
-  .state("info", {
+  .state("userInfo", {
     id: 1,
     name: "Elysia",
     email: "test@gmail.com",
@@ -20,7 +22,7 @@ const app = new Elysia()
     return "Hello Track";
   })
   .get("/tracks", ({ store, getDate }) => {
-    console.log(store.info);
+    console.log(store.userInfo);
     console.log(store.version);
     console.log(getDate());
     console.log(store["plugin-version"]);
@@ -34,7 +36,19 @@ const app = new Elysia()
         },
       }
     );
-  })
-  .listen(3000);
+  });
+
+app.group("/user", (app) =>
+  app
+    .get("/", () => "Hello User")
+    .get("/info", ({ store }) => store.userInfo)
+    .post("/", ({ body, set }) => {
+      set.status = 201;
+      return body;
+    })
+    .post("/signup", () => "Sign Up")
+);
+
+app.listen(PORT);
 
 console.log(`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
