@@ -1,5 +1,6 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { plugin } from "./plugin";
+import { signupDTO } from "./model";
 
 const PORT = 3000;
 
@@ -46,7 +47,11 @@ app.group("/user", (app) =>
       set.status = 201;
       return body;
     })
-    .post("/signup", () => "Sign Up")
+    // signup with validation
+    .post("/signup", ({ body }) => body, {
+      body: signupDTO,
+      response: signupDTO,
+    })
 );
 
 app.listen(PORT);
